@@ -1,3 +1,4 @@
+
 export type LeadStatus = 'Lead' | 'Interviewing' | 'Formation' | 'Recruiter' | 'Rejected';
 export type Priority = 'High' | 'Medium' | 'Low';
 
@@ -18,11 +19,12 @@ export interface Lead {
   source: string;
   status: LeadStatus;
   createdAt: string;
-  // New fields for LEAD-03
   priority: Priority;
-  score: number; // 0-100
+  score: number;
   tasks: Task[];
   nextFollowUp?: string;
+  cvBase64?: string;
+  cvFileName?: string;
 }
 
 export interface LeadFormData {
@@ -32,13 +34,16 @@ export interface LeadFormData {
   postAppliedFor: string;
   bio: string;
   source: string;
+  cvBase64?: string;
+  cvFileName?: string;
 }
 
 export enum ViewState {
   FORM = 'FORM',
   DASHBOARD = 'DASHBOARD',
   WORKER_DASHBOARD = 'WORKER_DASHBOARD',
+  MANAGER_DASHBOARD = 'MANAGER_DASHBOARD',
   LOGIN = 'LOGIN'
 }
 
-export type UserRole = 'RECRUITER' | 'WORKER' | null;
+export type UserRole = 'RECRUITER' | 'WORKER' | 'MANAGER' | null;

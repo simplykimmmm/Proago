@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { ViewState, UserRole } from '../types';
-import { LayoutDashboard, UserPlus, LogIn, Briefcase, Award } from 'lucide-react';
+import { LayoutDashboard, UserPlus, LogIn, Briefcase, Award, TrendingUp } from 'lucide-react';
 
 interface NavbarProps {
   currentView: ViewState;
@@ -18,14 +19,13 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onViewChange, isAuthentica
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center gap-3 cursor-pointer" onClick={() => onViewChange(ViewState.FORM)}>
               <div className="flex items-center gap-2">
-                 <span className="font-serif text-2xl font-bold text-white tracking-wide">PROAGO WORLD</span>
+                 <span className="font-serif text-2xl font-bold text-white tracking-wide italic">PROAGO WORLD</span>
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             
-            {/* Common Button: Apply Form (Always visible unless logged in as worker, maybe?) */}
-            {userRole !== 'WORKER' && (
+            {userRole !== 'WORKER' && userRole !== 'MANAGER' && (
                 <button
                 onClick={() => onViewChange(ViewState.FORM)}
                 className={`inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md transition-colors ${
@@ -35,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onViewChange, isAuthentica
                 }`}
                 >
                 <UserPlus className="h-4 w-4 mr-2" />
-                Apply Now
+                Apply
                 </button>
             )}
             
@@ -51,7 +51,21 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onViewChange, isAuthentica
                         }`}
                     >
                         <LayoutDashboard className="h-4 w-4 mr-2" />
-                        Recruiter Portal
+                        Recruitment
+                    </button>
+                )}
+
+                {userRole === 'MANAGER' && (
+                    <button
+                        onClick={() => onViewChange(ViewState.MANAGER_DASHBOARD)}
+                        className={`inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md transition-colors ${
+                        currentView === ViewState.MANAGER_DASHBOARD
+                            ? 'bg-slate-800 text-white'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                        }`}
+                    >
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        Manager Portal
                     </button>
                 )}
                 
@@ -73,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onViewChange, isAuthentica
 
                 <button
                     onClick={onLogout}
-                    className="text-slate-400 hover:text-white text-xs font-medium"
+                    className="text-slate-400 hover:text-white text-xs font-medium px-2"
                 >
                     Sign Out
                 </button>
