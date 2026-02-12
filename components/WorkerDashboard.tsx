@@ -4,7 +4,8 @@ import {
   Award, Clock, DollarSign, TrendingUp, TrendingDown, Calendar, MapPin, Shield, 
   ChevronRight, X, BarChart3, Star, Zap, CheckCircle2, Box, Info,
   Trophy, Target, ChevronUp, Flag, Users, Medal, LayoutDashboard,
-  Briefcase, ArrowUpRight, History, ShoppingBag, Activity
+  Briefcase, ArrowUpRight, History, ShoppingBag, Activity, Lock, Flame,
+  Coffee, Heart, Crown
 } from 'lucide-react';
 import { Language } from '../types';
 import { useTranslation } from '../services/translations';
@@ -24,20 +25,42 @@ interface DayData {
   feedback: string;
 }
 
+interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  isUnlocked: boolean;
+  unlockedDate?: string;
+  color: string;
+}
+
 const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
   const t = useTranslation(language);
   const [activeTab, setActiveTab] = useState<'performance' | 'ranking' | 'shifts'>('performance');
   const [activeModal, setActiveModal] = useState<'earnings' | 'achievements' | 'career' | null>(null);
   const [selectedDay, setSelectedDay] = useState<DayData | null>(null);
 
+  const achievements: Achievement[] = [
+    { id: '1', title: 'Top Closer', description: 'Complete 100 sales in a single month.', icon: Trophy, isUnlocked: true, unlockedDate: 'Nov 12, 2024', color: 'bg-yellow-500' },
+    { id: '2', title: 'Early Bird', description: 'Start your shift before 8:00 AM 5 times.', icon: Coffee, isUnlocked: true, unlockedDate: 'Oct 28, 2024', color: 'bg-orange-500' },
+    { id: '3', title: 'Flash Seller', description: 'Make 3 sales in under one hour.', icon: Zap, isUnlocked: true, unlockedDate: 'Nov 05, 2024', color: 'bg-indigo-500' },
+    { id: '4', title: 'Helping Hand', description: 'Mentor a new recruit during a shift.', icon: Heart, isUnlocked: true, unlockedDate: 'Nov 01, 2024', color: 'bg-rose-500' },
+    { id: '5', title: 'Weekly Legend', description: 'Maintain an 90%+ score for 7 consecutive days.', icon: Flame, isUnlocked: false, color: 'bg-orange-600' },
+    { id: '6', title: 'Market King', description: 'Lead the city leaderboard for two weeks.', icon: Crown, isUnlocked: false, color: 'bg-amber-500' },
+    { id: '7', title: 'Iron Guard', description: 'Zero missed shifts for 3 months.', icon: Shield, isUnlocked: false, color: 'bg-blue-600' },
+    { id: '8', title: 'Perfect Pitch', description: 'Get a 100% feedback score from a mystery shopper.', icon: Target, isUnlocked: false, color: 'bg-emerald-500' },
+  ];
+
   // Specific Pattern: Mon (Good), Tue (Bad), Wed/Thu (Good)
+  // Updated colors to be lighter in light mode (400 instead of 500)
   const weeklyData: DayData[] = [
-    { day: 'Mon', fullDay: 'Monday', score: 92, sales: 15, hours: 8.5, status: 'Excellent', color: 'bg-emerald-500 dark:bg-emerald-500', feedback: 'Outstanding start to the week. High conversion rate.' },
-    { day: 'Tue', fullDay: 'Tuesday', score: 35, sales: 3, hours: 8.0, status: 'Low', color: 'bg-rose-500 dark:bg-rose-500', feedback: 'Low energy detected. Sales pitch adherence was below 60%.' },
-    { day: 'Wed', fullDay: 'Wednesday', score: 88, sales: 12, hours: 7.5, status: 'Excellent', color: 'bg-emerald-500 dark:bg-emerald-500', feedback: 'Great recovery! Territory coverage was perfect.' },
-    { day: 'Thu', fullDay: 'Thursday', score: 95, sales: 18, hours: 9.0, status: 'Excellent', color: 'bg-emerald-600 dark:bg-emerald-400', feedback: 'Top performer of the day. Consistent energy levels.' },
-    { day: 'Fri', fullDay: 'Friday', score: 60, sales: 8, hours: 6.0, status: 'Average', color: 'bg-amber-400 dark:bg-amber-400', feedback: 'Solid effort, but left shift early.' },
-    { day: 'Sat', fullDay: 'Saturday', score: 75, sales: 10, hours: 5.0, status: 'Good', color: 'bg-emerald-400 dark:bg-emerald-600', feedback: 'Good weekend hustle.' },
+    { day: 'Mon', fullDay: 'Monday', score: 92, sales: 15, hours: 8.5, status: 'Excellent', color: 'bg-emerald-400 dark:bg-emerald-500', feedback: 'Outstanding start to the week. High conversion rate.' },
+    { day: 'Tue', fullDay: 'Tuesday', score: 35, sales: 3, hours: 8.0, status: 'Low', color: 'bg-rose-400 dark:bg-rose-500', feedback: 'Low energy detected. Sales pitch adherence was below 60%.' },
+    { day: 'Wed', fullDay: 'Wednesday', score: 88, sales: 12, hours: 7.5, status: 'Excellent', color: 'bg-emerald-400 dark:bg-emerald-500', feedback: 'Great recovery! Territory coverage was perfect.' },
+    { day: 'Thu', fullDay: 'Thursday', score: 95, sales: 18, hours: 9.0, status: 'Excellent', color: 'bg-emerald-500 dark:bg-emerald-400', feedback: 'Top performer of the day. Consistent energy levels.' },
+    { day: 'Fri', fullDay: 'Friday', score: 60, sales: 8, hours: 6.0, status: 'Average', color: 'bg-amber-300 dark:bg-amber-400', feedback: 'Solid effort, but left shift early.' },
+    { day: 'Sat', fullDay: 'Saturday', score: 75, sales: 10, hours: 5.0, status: 'Good', color: 'bg-emerald-300 dark:bg-emerald-600', feedback: 'Good weekend hustle.' },
     { day: 'Sun', fullDay: 'Sunday', score: 0, sales: 0, hours: 0, status: 'Rest', color: 'bg-slate-200 dark:bg-slate-800', feedback: 'Rest Day.' },
   ];
 
@@ -100,7 +123,7 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
+          <div key={idx} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group cursor-default">
              <div className="flex items-center gap-4">
                <div className={`p-3 rounded-xl ${stat.bgColor} ${stat.color} group-hover:scale-110 transition-transform`}>
                  <stat.icon className="w-6 h-6" />
@@ -129,26 +152,27 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
                    <div 
                       key={i} 
                       onClick={() => setSelectedDay(data)}
-                      className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl relative group overflow-hidden cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-300" 
+                      className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl relative group overflow-hidden cursor-pointer hover:shadow-md hover:ring-2 hover:ring-indigo-200 dark:hover:ring-indigo-900 transition-all duration-300" 
                       style={{ height: '100%' }}
                    >
                      {/* Hover Tooltip/Label */}
-                     <div className="absolute inset-0 flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100 z-10 transition-opacity">
-                        <span className="text-[10px] font-black text-slate-900 dark:text-white bg-white/90 dark:bg-black/50 px-1.5 rounded backdrop-blur-sm">{data.score}%</span>
+                     <div className="absolute top-2 inset-x-0 flex justify-center opacity-0 group-hover:opacity-100 z-10 transition-opacity">
+                        <span className="text-[10px] font-black text-white bg-slate-900/80 dark:bg-indigo-600/90 px-2 py-0.5 rounded-full backdrop-blur-sm">{data.score}%</span>
                      </div>
                      
-                     <div className="absolute bottom-0 left-0 right-0 flex items-end">
+                     <div className="absolute inset-0 flex items-end h-full w-full">
                         <div 
-                          className={`w-full mx-auto rounded-2xl transition-all duration-1000 ease-out relative ${data.color} ${data.score === 0 ? 'h-2 bg-slate-200 dark:bg-slate-800' : ''}`} 
-                          style={{ height: data.score === 0 ? '8px' : `${data.score}%` }}
+                          className={`w-full mx-auto rounded-t-2xl transition-all duration-700 ease-out relative ${data.color} ${data.score === 0 ? 'h-1 opacity-20' : ''}`} 
+                          style={{ height: data.score === 0 ? '4px' : `${data.score}%` }}
                         >
+                          <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/10 rounded-t-2xl"></div>
                         </div>
                      </div>
                    </div>
                  ))}
               </div>
               <div className="flex justify-between mt-4 text-[10px] font-black uppercase text-slate-400 tracking-widest px-1">
-                {weeklyData.map(d => <span key={d.day}>{d.day}</span>)}
+                {weeklyData.map(d => <span key={d.day} className="flex-1 text-center">{d.day}</span>)}
               </div>
            </div>
            
@@ -184,11 +208,11 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
                      {user.rank}
                    </div>
                    <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-500 dark:text-slate-400 text-xs">
+                     <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-500 dark:text-slate-400 text-xs text-center leading-none">
                        {user.avatar}
                      </div>
                      <span className={`font-bold ${user.name === 'You' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300'}`}>{user.name}</span>
-                   </div>
+                 </div>
                  </div>
                  <div className="text-right">
                    <span className="block text-2xl font-black text-slate-900 dark:text-white italic tracking-tighter">{user.score}</span>
@@ -235,7 +259,7 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
       {/* Day Detail Modal */}
       {selectedDay && (
         <Modal title={selectedDay.fullDay} onClose={() => setSelectedDay(null)}>
-          <div className="space-y-8">
+          <div className="space-y-8 animate-fade-in-up">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className={`h-16 w-16 rounded-2xl flex items-center justify-center text-white shadow-lg ${selectedDay.color}`}>
@@ -285,7 +309,66 @@ const WorkerDashboard: React.FC<WorkerDashboardProps> = ({ language }) => {
         </Modal>
       )}
 
-      {activeModal && <Modal title={activeModal === 'earnings' ? t.worker.earnings : activeModal} onClose={() => setActiveModal(null)} />}
+      {/* Achievements Modal Content */}
+      {activeModal === 'achievements' && (
+        <Modal title="Your Achievements" onClose={() => setActiveModal(null)}>
+          <div className="space-y-8 animate-fade-in">
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-[24px] border border-slate-100 dark:border-slate-800">
+              <div className="flex justify-between items-center mb-4">
+                 <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Global Progress</span>
+                 <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">4 / 8 Unlocked</span>
+              </div>
+              <div className="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div className="h-full bg-indigo-600 w-1/2 rounded-full shadow-[0_0_10px_rgba(79,70,229,0.5)]"></div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {achievements.map((achievement) => (
+                <div 
+                  key={achievement.id} 
+                  className={`relative p-5 rounded-[24px] border transition-all duration-300 ${
+                    achievement.isUnlocked 
+                      ? 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md' 
+                      : 'bg-slate-50 dark:bg-slate-900 border-dashed border-slate-200 dark:border-slate-800 opacity-80'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-2xl flex-shrink-0 relative ${
+                      achievement.isUnlocked ? `${achievement.color} shadow-lg text-white` : 'bg-slate-200 dark:bg-slate-800 text-slate-400 grayscale'
+                    }`}>
+                      <achievement.icon className="w-6 h-6" />
+                      {!achievement.isUnlocked && (
+                         <div className="absolute -top-1 -right-1 bg-white dark:bg-slate-700 rounded-full p-0.5 shadow-sm">
+                            <Lock className="w-3 h-3 text-slate-400" />
+                         </div>
+                      )}
+                    </div>
+                    <div>
+                       <h5 className={`text-sm font-black uppercase tracking-tight italic ${
+                         achievement.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-400'
+                       }`}>
+                         {achievement.title}
+                       </h5>
+                       <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                         {achievement.description}
+                       </p>
+                       {achievement.isUnlocked && achievement.unlockedDate && (
+                         <div className="mt-2 inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800">
+                            <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                            <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">{achievement.unlockedDate}</span>
+                         </div>
+                       )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {activeModal && activeModal !== 'achievements' && <Modal title={activeModal === 'earnings' ? t.worker.earnings : activeModal} onClose={() => setActiveModal(null)} />}
     </div>
   );
 };

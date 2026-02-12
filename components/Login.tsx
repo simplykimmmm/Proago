@@ -34,6 +34,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, language }) => {
     setError('');
   };
 
+  const inputClasses = "block w-full pl-10 sm:text-sm border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-slate-900 dark:focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-slate-800 text-slate-900 dark:text-white py-3 border outline-none transition-all";
+
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 flex-grow h-full animate-fade-in">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -64,7 +66,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, language }) => {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="block w-full pl-10 sm:text-sm border-slate-200 dark:border-slate-700 rounded-xl focus:ring-slate-900 dark:focus:ring-indigo-500 focus:border-slate-900 dark:bg-slate-800 dark:text-white py-3 border outline-none transition-all"
+                  className={inputClasses}
                   placeholder="ID Number"
                 />
               </div>
@@ -83,7 +85,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, language }) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 sm:text-sm border-slate-200 dark:border-slate-700 rounded-xl focus:ring-slate-900 dark:focus:ring-indigo-500 focus:border-slate-900 dark:bg-slate-800 dark:text-white py-3 border outline-none transition-all"
+                  className={inputClasses}
                   placeholder="••••••••"
                 />
               </div>

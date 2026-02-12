@@ -97,6 +97,8 @@ const LeadForm: React.FC<LeadFormProps> = ({ language }) => {
     }
   };
 
+  const inputClasses = "mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 py-2 px-3 border bg-white dark:bg-slate-800 text-slate-900 dark:text-white sm:text-sm transition-all";
+
   if (status === 'success') {
     return (
       <div className="max-w-2xl mx-auto mt-12 px-4 sm:px-6">
@@ -146,22 +148,22 @@ const LeadForm: React.FC<LeadFormProps> = ({ language }) => {
           <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.fullName} *</label>
-              <input type="text" name="fullName" required value={formData.fullName} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm" />
+              <input type="text" name="fullName" required value={formData.fullName} onChange={handleChange} className={inputClasses} />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.email} *</label>
-              <input type="email" name="email" required value={formData.email} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm" />
+              <input type="email" name="email" required value={formData.email} onChange={handleChange} className={inputClasses} />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.phone} *</label>
-              <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm" />
+              <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} className={inputClasses} />
             </div>
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.position} *</label>
-              <select name="postAppliedFor" required value={formData.postAppliedFor} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm">
+              <select name="postAppliedFor" required value={formData.postAppliedFor} onChange={handleChange} className={inputClasses}>
                 <option value="">...</option>
                 <option value="Promoter / Brand Ambassador">Promoter / Brand Ambassador</option>
                 <option value="Door-to-Door Sales Representative">D2D Sales Representative</option>
@@ -204,7 +206,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ language }) => {
             
             <div className="sm:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.source} *</label>
-              <select name="source" required value={formData.source} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm">
+              <select name="source" required value={formData.source} onChange={handleChange} className={inputClasses}>
                 <option value="">...</option>
                 <option value="LinkedIn">LinkedIn</option>
                 <option value="Moovijob">Moovijob</option>
@@ -215,7 +217,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ language }) => {
 
             <div className="sm:col-span-2">
               <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{t.form.bio} *</label>
-              <textarea name="bio" rows={4} required value={formData.bio} onChange={handleChange} className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 shadow-sm focus:border-indigo-500 py-2 px-3 border dark:bg-slate-800 dark:text-white sm:text-sm" />
+              <textarea name="bio" rows={4} required value={formData.bio} onChange={handleChange} className={inputClasses} />
             </div>
           </div>
 
