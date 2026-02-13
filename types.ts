@@ -4,6 +4,7 @@ export type Theme = 'light' | 'dark';
 export type Language = 'en' | 'fr' | 'de';
 
 export enum ViewState {
+  LANDING = 'LANDING',
   FORM = 'FORM',
   DASHBOARD = 'DASHBOARD',
   WORKER_DASHBOARD = 'WORKER_DASHBOARD',

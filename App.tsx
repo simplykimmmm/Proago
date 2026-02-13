@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/Navbar';
+import LandingPage from './components/LandingPage';
 import LeadForm from './components/LeadForm';
 import Dashboard from './components/Dashboard';
 import WorkerDashboard from './components/WorkerDashboard';
@@ -9,14 +10,14 @@ import Login from './components/Login';
 import { ViewState, UserRole, Theme, Language } from './types';
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewState>(ViewState.FORM);
+  const [currentView, setCurrentView] = useState<ViewState>(ViewState.LANDING);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      return (localStorage.getItem('proago-theme') as Theme) || 'light';
+      return (localStorage.getItem('proago-theme') as Theme) || 'dark';
     }
-    return 'light';
+    return 'dark';
   });
   const [language, setLanguage] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
@@ -40,7 +41,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('proago-lang', language);
-    // Trigger transition when language changes
     setFade(false);
     const timeout = setTimeout(() => setFade(true), 100);
     return () => clearTimeout(timeout);
@@ -74,11 +74,11 @@ const App: React.FC = () => {
     if (view === ViewState.WORKER_DASHBOARD && userRole !== 'WORKER') return;
     if (view === ViewState.MANAGER_DASHBOARD && userRole !== 'MANAGER') return;
 
-    // Trigger transition
     setFade(false);
     setTimeout(() => {
       setCurrentView(view);
       setFade(true);
+      window.scrollTo(0, 0);
     }, 200);
   };
 
@@ -86,6 +86,7 @@ const App: React.FC = () => {
 
   const content = useMemo(() => {
     switch (currentView) {
+      case ViewState.LANDING: return <LandingPage onAction={() => handleViewChange(ViewState.FORM)} />;
       case ViewState.FORM: return <LeadForm language={language} />;
       case ViewState.DASHBOARD: return isAuthenticated && userRole === 'RECRUITER' ? <Dashboard language={language} /> : null;
       case ViewState.WORKER_DASHBOARD: return isAuthenticated && userRole === 'WORKER' ? <WorkerDashboard language={language} /> : null;
@@ -96,7 +97,7 @@ const App: React.FC = () => {
   }, [currentView, isAuthenticated, userRole, language]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-500">
+    <div className="min-h-screen bg-white dark:bg-phoenix-black text-slate-900 dark:text-white flex flex-col font-sans transition-colors duration-500 overflow-x-hidden">
       <Navbar 
         currentView={currentView} 
         onViewChange={handleViewChange} 
@@ -113,11 +114,14 @@ const App: React.FC = () => {
         {content}
       </main>
 
-      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto transition-colors duration-500">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
-            &copy; {new Date().getFullYear()} PROAGO WORLD. All rights reserved.
-          </p>
+      <footer className="bg-slate-50 dark:bg-phoenix-black/80 backdrop-blur-md border-t border-slate-200 dark:border-white/5 mt-auto transition-colors duration-500">
+        <div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <span className="text-xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">PROAGO WORLD</span>
+            <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-500">
+              &copy; {new Date().getFullYear()} PROAGO WORLD. RISE BEYOND LIMITS.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
